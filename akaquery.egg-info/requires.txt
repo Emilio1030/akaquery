@@ -1,0 +1,17 @@
+langchain
+langchain_openai
+langchain_community
+langchain_anthropic
+python-dotenv
+ipython
+gpt4all
+PyPDF2
+pypdf
+chromadb
+psycopg2-binary
+pip>=9
+setuptools>=26
+twine
+wheel>=0.29
+streamlit
+statsmodels
