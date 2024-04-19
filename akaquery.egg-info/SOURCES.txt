@@ -1,0 +1,11 @@
+.gitignore
+MANIFEST.in
+README.md
+requirements.txt
+setup.py
+akaquery.egg-info/PKG-INFO
+akaquery.egg-info/SOURCES.txt
+akaquery.egg-info/dependency_links.txt
+akaquery.egg-info/not-zip-safe
+akaquery.egg-info/requires.txt
+akaquery.egg-info/top_level.txt
