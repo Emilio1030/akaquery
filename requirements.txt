@@ -5,9 +5,11 @@ langchain_openai
 langchain_community
 langchain_anthropic
 
+
 ### The following requirements for local run
 python-dotenv
 ipython  # For display, Markdown, Latex functionalities
+ipdb
 
 ### The following requirements for local LLM
 gpt4all # for embedding
@@ -33,3 +35,11 @@ streamlit
 statsmodels
 unstructured
 markdown
+
+
+# hugging face
+transformers==4.40.2
+huggingface-hub==0.23.0
+pdfminer.six
+langchain-core
+htbuilder
