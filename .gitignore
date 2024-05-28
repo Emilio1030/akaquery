@@ -1,4 +1,3 @@
 data/
 .env
-interface/.streamlit/secrets.toml
 akaquery/interface/.streamlit/secrets.toml
