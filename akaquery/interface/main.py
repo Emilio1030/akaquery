@@ -235,7 +235,6 @@ class PrintRetrievalHandler(BaseCallbackHandler):
             np.linalg.norm(embedding1) * np.linalg.norm(embedding2)
         )
 
-
 # Setup memory for contextual conversation
 msgs = StreamlitChatMessageHistory()
 memory = ConversationBufferMemory(
