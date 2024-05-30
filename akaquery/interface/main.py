@@ -17,7 +17,9 @@ from langchain_community.chat_message_histories import StreamlitChatMessageHisto
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chains import ConversationalRetrievalChain
 from langchain_openai import OpenAIEmbeddings
-from langchain_community.vectorstores import Chroma
+#from langchain_community.vectorstores import Chroma
+from langchain_chroma import Chroma
+
 import pandas as pd
 import numpy as np
 from PIL import Image
@@ -36,14 +38,14 @@ st.write(
 )
 
 # Set variables
-base_path = "../../data/pdf"
+base_path = "././data/pdf"
 # LLM flag for augmented generation (the flag only applied to llm, not embedding model)
 USE_Anthropic = True
 
 if USE_Anthropic:
     model_name = "claude-3-sonnet-20240229"
 else:
-    # model_name = "gpt-3.5-turbo"
+    # model_name = "gpt-3.5-tlsxsurbo"
     model_name = "gpt-4-0125-preview"  # gpt-4 seems to be slow
 
 
@@ -81,7 +83,7 @@ def get_json(file_path):
     return data
 
 #ipdb.set_trace()
-summary_data = get_json("../../notebook/summary.json")
+summary_data = get_json("././notebook/summary.json")
 
 # ## Sidebar
 # # Define the CSS for the sidebar
