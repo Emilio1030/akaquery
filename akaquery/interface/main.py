@@ -1,8 +1,8 @@
 ## sqlite3 related (for Streamlit)
 #import pysqlite3
-import sys
+#import sys
 
-sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
+#sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
 
 import os
 import json
@@ -17,8 +17,8 @@ from langchain_community.chat_message_histories import StreamlitChatMessageHisto
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chains import ConversationalRetrievalChain
 from langchain_openai import OpenAIEmbeddings
-#from langchain_community.vectorstores import Chroma
-from langchain_chroma import Chroma
+from langchain_community.vectorstores import Chroma
+#from langchain_chroma import Chroma
 
 import pandas as pd
 import numpy as np
