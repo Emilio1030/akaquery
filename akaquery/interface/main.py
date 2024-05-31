@@ -138,7 +138,7 @@ with st.sidebar:
             value=0.5,
             step=0.25,
         )
-        flag_similarity_out = st.toggle(
+        flag_similarity_out = st.checkbox(
             "Output similarity score",
             value=False,
             help="The retrieval process may become slower due to the cosine similarity calculations. A similarity score of 100% indicates the highest level of similarity between the query and the retrieved chunk.",
