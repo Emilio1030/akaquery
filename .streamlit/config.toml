@@ -16,4 +16,4 @@ base="light"
 # Font family for all text in the app, except code blocks
 #Accepted values (serif | sans serif | monospace)
 #Default: "sans serif"
-font = "montserrat"
+# font = "montserrat"
