@@ -1,8 +1,15 @@
 ## sqlite3 related (for Streamlit)
+
 #import pysqlite3
 import sys
+=======
 
-#sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
+
+#import pysqlite3
+__import__('pysqlite3')
+import sys
+import sqlite3
+sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
 
 import os
 import json
@@ -137,7 +144,7 @@ with st.sidebar:
             value=0.5,
             step=0.25,
         )
-        flag_similarity_out = st.toggle(
+        flag_similarity_out = st.checkbox(
             "Output similarity score",
             value=False,
             help="The retrieval process may become slower due to the cosine similarity calculations. A similarity score of 100% indicates the highest level of similarity between the query and the retrieved chunk.",
@@ -266,6 +273,7 @@ class PrintRetrievalHandler(BaseCallbackHandler):
             self.container.write(source_msg, unsafe_allow_html=True)
             source_msgs += source_msg
         self.msgs.add_ai_message(source_msgs)
+
     def cosine_similarity(self, embedding1, embedding2):
         return np.dot(embedding1, embedding2) / (
             np.linalg.norm(embedding1) * np.linalg.norm(embedding2)
@@ -471,7 +479,6 @@ def layout(*args):
             body(arg)
 
     st.markdown(str(foot), unsafe_allow_html=True)
-
 
 # function footnote
 def footer():
