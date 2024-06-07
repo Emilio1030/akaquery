@@ -132,7 +132,7 @@ with st.sidebar:
         num_source = st.slider(
             "Top N sources to view:", min_value=4, max_value=20, value=5, step=1
         )
-        flag_mmr = st.toggle(
+        flag_mmr = st.checkbox(
             "Diversity search",
             value=True,
             help="Diversity search, i.e., Maximal Marginal Relevance (MMR) tries to reduce redundancy of fetched documents and increase diversity. 0 being the most diverse, 1 being the least diverse. 0.5 is a balanced state.",
