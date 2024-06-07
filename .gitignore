@@ -1,3 +1,7 @@
 .env
 akaquery/interface/.streamlit/secrets.toml
 .streamlit/secrets.toml
+data/
+.data/
+data/chroma_semantic/322716be-189b-4eb4-8ef1-7cb30d4ca68f/data_level0.bin
+data/chroma_semantic/chroma.sqlite3

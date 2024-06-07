@@ -1,6 +1,11 @@
 ## sqlite3 related (for Streamlit)
 
 #import pysqlite3
+import sys
+=======
+
+
+#import pysqlite3
 __import__('pysqlite3')
 import sys
 import sqlite3
@@ -20,8 +25,6 @@ from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chains import ConversationalRetrievalChain
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import Chroma
-#from langchain_chroma import Chroma
-
 import pandas as pd
 import numpy as np
 from PIL import Image
@@ -40,14 +43,16 @@ st.write(
 )
 
 # Set variables
-base_path = "././data/pdf"
+base_path = "data/pdf"
+
+
 # LLM flag for augmented generation (the flag only applied to llm, not embedding model)
 USE_Anthropic = True
 
 if USE_Anthropic:
     model_name = "claude-3-sonnet-20240229"
 else:
-    # model_name = "gpt-3.5-tlsxsurbo"
+    # model_name = "gpt-3.5-turbo"
     model_name = "gpt-4-0125-preview"  # gpt-4 seems to be slow
 
 
@@ -67,7 +72,6 @@ def scan_directory(base_path):
             folders_files[folder] = files
     return folders_files
 
-
 document_list = scan_directory(base_path)
 collection_list=[
     "legislation",
@@ -85,7 +89,7 @@ def get_json(file_path):
     return data
 
 #ipdb.set_trace()
-summary_data = get_json("././notebook/summary.json")
+summary_data = get_json("notebook/summary.json")
 
 # ## Sidebar
 # # Define the CSS for the sidebar
@@ -128,7 +132,7 @@ with st.sidebar:
         num_source = st.slider(
             "Top N sources to view:", min_value=4, max_value=20, value=5, step=1
         )
-        flag_mmr = st.checkbox(
+        flag_mmr = st.toggle(
             "Diversity search",
             value=True,
             help="Diversity search, i.e., Maximal Marginal Relevance (MMR) tries to reduce redundancy of fetched documents and increase diversity. 0 being the most diverse, 1 being the least diverse. 0.5 is a balanced state.",
@@ -149,10 +153,11 @@ with st.sidebar:
 # Create a vector store for the document collection
 vectorstore = Chroma(
     embedding_function=OpenAIEmbeddings(model="text-embedding-3-large"),
-    persist_directory="../data/chroma_semantic",
+    persist_directory="data/chroma_semantic",
     collection_name=collection_name,
 )
 
+#ipdb.set_trace()
 # Retrieve and RAG chain
 # Create a retriever using the vector database as the search source
 search_kwargs = {"k": num_source}
@@ -162,18 +167,21 @@ if document_name != "All":
     search_kwargs["filter"] = {"source": document_name}
 
 if flag_mmr:
-    retriever = vectorstore.as_retriever(
-        search_type="mmr", search_kwargs={**search_kwargs, "lambda_mult": _lambda_mult}
-    )
     # Use MMR (Maximum Marginal Relevance) to find a set of documents
     # that are both similar to the input query and diverse among themselves
     # Increase the number of documents to get, and increase diversity
     # (lambda mult 0.5 being default, 0 being the most diverse, 1 being the least)
+    retriever = vectorstore.as_retriever(
+        search_type="mmr",
+        search_kwargs={**search_kwargs, "lambda_mult": _lambda_mult}
+    )
+
 else:
     retriever = vectorstore.as_retriever(
         search_kwargs=search_kwargs
     )  # use similarity search
 
+#ipdb.set_trace()
 
 # Chat model stream handler
 class StreamHandler(BaseCallbackHandler):
@@ -196,17 +204,56 @@ class StreamHandler(BaseCallbackHandler):
         self.container.markdown(self.text)
 
 
-# Retrieval handler
+# # Retrieval handler
+# class PrintRetrievalHandler(BaseCallbackHandler):
+#     def __init__(self, container, msgs, calculate_similarity=False):
+#         self.status = container.status("**Context Retrieval**")
+#         self.msgs = msgs
+#         self.embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
+#         self.calculate_similarity = calculate_similarity
+
+#     def on_retriever_start(self, serialized: dict, query: str, **kwargs):
+#         self.status.update(label=f"**Context Retrieval:** {query}")
+#         self.msgs.add_ai_message(f"Query: {query}")
+#         if self.calculate_similarity:
+#             self.query_embedding = self.embeddings.embed_query(query)
+
+#     def on_retriever_end(self, documents, **kwargs):
+#         source_msgs = ""
+#         for idx, doc in enumerate(documents):
+#             source = os.path.basename(doc.metadata["source"])
+#             # page = doc.metadata["page"] + 1 # use when page-info is available
+#             page_txt = ""  # if available page_txt = f", page {page}"
+#             contents = doc.page_content
+#             similarity_txt = ""
+#             if self.calculate_similarity:
+#                 content_embedding = self.embeddings.embed_query(contents)
+#                 similarity = round(
+#                     self.cosine_similarity(self.query_embedding, content_embedding)
+#                     * 100
+#                 )
+#                 similarity_txt = f" \n* **Similarity score: {similarity}%**"
+
+#             source_msg = f"# Retrieval {idx+1}\n* **Document: {source}{page_txt}**{similarity_txt}\n\n {contents}\n\n"
+
+#             self.status.write(source_msg, unsafe_allow_html=True)
+#             source_msgs += source_msg
+#         self.msgs.add_ai_message(source_msgs)
+#         self.status.update(state="complete")
+
+    # def cosine_similarity(self, embedding1, embedding2):
+    #     return np.dot(embedding1, embedding2) / (
+    #         np.linalg.norm(embedding1) * np.linalg.norm(embedding2)
+    #     )
 class PrintRetrievalHandler(BaseCallbackHandler):
     def __init__(self, container, msgs, calculate_similarity=False):
-        self.status_container = container
-        self.status = container.empty()  # Create an empty container
+        self.container = container
         self.msgs = msgs
         self.embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
         self.calculate_similarity = calculate_similarity
 
     def on_retriever_start(self, serialized: dict, query: str, **kwargs):
-        self.status.markdown(f"**Context Retrieval:** {query}")
+        self.status = st.spinner(f"**Context Retrieval:** {query}")
         self.msgs.add_ai_message(f"Query: {query}")
         if self.calculate_similarity:
             self.query_embedding = self.embeddings.embed_query(query)
@@ -215,31 +262,24 @@ class PrintRetrievalHandler(BaseCallbackHandler):
         source_msgs = ""
         for idx, doc in enumerate(documents):
             source = os.path.basename(doc.metadata["source"])
-            # page = doc.metadata["page"] + 1 # use when page-info is available
-            page_txt = ""  # if available page_txt = f", page {page}"
             contents = doc.page_content
-
             similarity_txt = ""
             if self.calculate_similarity:
                 content_embedding = self.embeddings.embed_query(contents)
-                similarity = round(
-                    self.cosine_similarity(self.query_embedding, content_embedding)
-                    * 100
-                )
+                similarity = round(self.cosine_similarity(self.query_embedding, content_embedding) * 100)
                 similarity_txt = f" \n* **Similarity score: {similarity}%**"
 
-            source_msg = f"# Retrieval {idx+1}\n* **Document: {source}{page_txt}**{similarity_txt}\n\n {contents}\n\n"
-
-            self.status.markdown(source_msg, unsafe_allow_html=True)
+            source_msg = f"# Retrieval {idx+1}\n* **Document: {source}**{similarity_txt}\n\n {contents}\n\n"
+            self.container.write(source_msg, unsafe_allow_html=True)
             source_msgs += source_msg
         self.msgs.add_ai_message(source_msgs)
-        self.status.markdown("**Retrieval complete**")
 
     def cosine_similarity(self, embedding1, embedding2):
         return np.dot(embedding1, embedding2) / (
             np.linalg.norm(embedding1) * np.linalg.norm(embedding2)
         )
 
+#ipdb.set_trace()
 # Setup memory for contextual conversation
 msgs = StreamlitChatMessageHistory()
 memory = ConversationBufferMemory(
@@ -263,6 +303,7 @@ else:
         temperature=0,
         streaming=True,
     )
+
 
 qa_chain = ConversationalRetrievalChain.from_llm(
     llm, retriever=retriever, memory=memory, verbose=True
@@ -381,10 +422,7 @@ with st.sidebar:
     # st.caption(
     #     f"🖋️ The Python code and documentation of the project are in [GitHub]({link})."
     # )
-
-
 # layout footnote
-
 def image(src_as_string, **style):
     return img(src=src_as_string, style=styles(**style))
 
@@ -442,9 +480,6 @@ def layout(*args):
 
     st.markdown(str(foot), unsafe_allow_html=True)
 
-
-
-
 # function footnote
 def footer():
     # LINK
@@ -467,6 +502,7 @@ def footer():
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width: 1.55em; height: 2em; color: white;">
     <path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"/></svg>
     '''
+
 
     myargs = [
         "Made in ",
