@@ -331,10 +331,20 @@ for msg in msgs.messages:
     elif msg.content.startswith("# Retrieval"):
         with st.expander(f"📖 **Context Retrieval:** {tmp_query}", expanded=False):
             st.write(msg.content, unsafe_allow_html=True)
-
     else:
         tmp_query = ""
         st.chat_message(avatars[msg.type]).write(msg.content)
+
+# for msg in msgs.messages:
+#     if msg.content.startswith("Query:"):
+#         tmp_query = msg.content.lstrip("Query: ")
+#     elif msg.content.startswith("# Retrieval"):
+#         with st.expander(f"📖 **Context Retrieval:** {tmp_query}", expanded=False):
+#             st.write(msg.content, unsafe_allow_html=True)
+
+#     else:
+#         tmp_query = ""
+#         st.chat_message(avatars[msg.type]).write(msg.content)
 
 # Download or get the main themes of the selected document
 if document_name != "All":
