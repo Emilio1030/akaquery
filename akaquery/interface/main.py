@@ -345,29 +345,41 @@ for msg in msgs.messages:
 #     else:
 #         tmp_query = ""
 #         st.chat_message(avatars[msg.type]).write(msg.content)
-
 # Download or get the main themes of the selected document
+
 if document_name != "All":
     pdf_file_path = base_path + "/" + collection_name + "/" + document_name
-    # Open the file in binary mode
-    with open(pdf_file_path, "rb") as pdf_file:
-        # Read the PDF file's binary data
-        pdf_bytes = pdf_file.read()
-
-        # Create the download button
-        st.sidebar.download_button(
-            label="Download selected document",
-            data=pdf_bytes,
+    document_summary = summary_data.get(collection_name, {}).get(document_name, "")
+    document_summary = (
+        document_summary if document_summary else "This document has no summary."
+    )
+    with st.sidebar:
+        st.download_button(
+            label="📄 Download Selected Document",
+            data=open(pdf_file_path, "rb").read(),
             file_name=document_name,
-            mime="application/octet-stream",
-            use_container_width=True,
+            mime="application/pdf",
         )
-    summary = summary_data.get(document_name)
-    with st.sidebar.expander("AI generated summary of the document", expanded=True):
-        if summary:
-            st.write(summary.get("summary", "Summary not available."))
-        else:
-            st.write(f"Summary of '{document_name}' not found in the file.")
+        st.write("## Document Summary")
+        st.info(document_summary)
+
+
+# Download or get the main themes of the selected document
+# if document_name != "All":
+#     pdf_file_path = base_path + "/" + collection_name + "/" + document_name
+#     document_summary = summary_data.get(collection_name, {}).get(document_name, "")
+#     document_summary = (
+#         document_summary if document_summary else "This document has no summary."
+#     )
+#     with st.sidebar:
+#         st.download_button(
+#             label="📄 Download Selected Document",
+#             data=open(pdf_file_path, "rb").read(),
+#             file_name=document_name,
+#             mime="application/pdf",
+#         )
+#         st.write("## Document Summary")
+#         st.info(document_summary)
 
     # if st.sidebar.button(
     #     "Get main themes of selected document",
