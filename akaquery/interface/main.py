@@ -269,16 +269,12 @@ class PrintRetrievalHandler(BaseCallbackHandler):
                 similarity = round(self.cosine_similarity(self.query_embedding, content_embedding) * 100)
                 similarity_txt = f" \n* **Similarity score: {similarity}%**"
 
-            # new part ####
-            # start #######
             with st.expander(f"📖 **Context Retrieval {idx+1}: {source}**", expanded=False):
                 st.write(contents, unsafe_allow_html=True)
                 if similarity_txt:
                     st.write(similarity_txt)
-            # end #########
 
             source_msg = f"# Retrieval {idx+1}\n* **Document: {source}**{similarity_txt}\n\n {contents}\n\n"
-            self.container.write(source_msg, unsafe_allow_html=True)
             source_msgs += source_msg
         self.msgs.add_ai_message(source_msgs)
 
@@ -286,7 +282,6 @@ class PrintRetrievalHandler(BaseCallbackHandler):
         return np.dot(embedding1, embedding2) / (
             np.linalg.norm(embedding1) * np.linalg.norm(embedding2)
         )
-
 #ipdb.set_trace()
 # Setup memory for contextual conversation
 msgs = StreamlitChatMessageHistory()
@@ -347,6 +342,7 @@ for msg in msgs.messages:
 #         st.chat_message(avatars[msg.type]).write(msg.content)
 # Download or get the main themes of the selected document
 
+# Download or get the main themes of the selected document
 if document_name != "All":
     pdf_file_path = base_path + "/" + collection_name + "/" + document_name
     document_summary = summary_data.get(collection_name, {}).get(document_name, "")
