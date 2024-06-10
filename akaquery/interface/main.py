@@ -108,10 +108,13 @@ summary_data = get_json("notebook/summary.json")
 st.sidebar.header("About")
 with st.sidebar:
     st.markdown(
-        "Welcome to **AKAQUERY**, an AI-powered tool designed to assist teams with legislative consultations.."
+        "Welcome to **AKAQUERY**, an AI-powered tool for reliable legislative consultations."
     )
     st.markdown(
-        "Actuaries should verify accuracy when using AI. Review the summaries or download the full documents to ensure reliability. Compare the retrieved contexts with AI responses for consistency."
+        "**AKAQUERY** enables users to review summaries or download full documents. Ensure consistency by comparing the retrieved context with AI responses."
+    )
+    st.markdown(
+        "Compare the retrieved contexts with AI responses for consistency."
     )
     st.markdown("Created by [Emilio Aguiar](https://www.linkedin.com/in/matthewrwadams/).")
 
@@ -124,9 +127,7 @@ with st.sidebar:
     st.markdown(badge_html, unsafe_allow_html=True)
 
     st.markdown("""---""")
-
 # with st.sidebar:
-
 #     st.header("**LLM Model**")
 #     st.write(
 #         f"The *{model_name}*-powered RAG process searches for and retrieves information on actuarial documents. Harness its power but **with accountability and responsibility**."
@@ -137,7 +138,7 @@ with st.sidebar:
 #     st.write(
 #         "Actuaries are strongly advised to **evaluate for accuracy** when using AI. Download the documents to read and review the source. Read the retrieved contexts to compare to chat's response."
 #     )
-
+    st.sidebar.header("Features")
     collection_name = st.selectbox(
         "Select your document collection",
         collection_list,
