@@ -108,10 +108,10 @@ summary_data = get_json("notebook/summary.json")
 st.sidebar.header("About")
 with st.sidebar:
     st.markdown(
-        "Welcome to **AKAQUERY**, an AI-powered tool designed to help teams and to make life easier regarding legislation consultation."
+        "Welcome to **AKAQUERY**, an AI-powered tool designed to assist teams with legislative consultations.."
     )
     st.markdown(
-        "Actuaries are strongly advised to **evaluate for accuracy** when using AI. Download the documents to read and review the source. Read the retrieved contexts to compare to AI's responses."
+        "Actuaries should verify accuracy when using AI. Review the summaries or download the full documents to ensure reliability. Compare the retrieved contexts with AI responses for consistency."
     )
     st.markdown("Created by [Emilio Aguiar](https://www.linkedin.com/in/matthewrwadams/).")
 
@@ -365,19 +365,25 @@ for msg in msgs.messages:
 # Download or get the main themes of the selected document
 if document_name != "All":
     pdf_file_path = base_path + "/" + collection_name + "/" + document_name
-    document_summary = summary_data.get(collection_name, {}).get(document_name, "")
-    document_summary = (
-        document_summary if document_summary else "This document has no summary."
-    )
-    with st.sidebar:
-        st.download_button(
-            label="📄 Download Selected Document",
-            data=open(pdf_file_path, "rb").read(),
+    # Open the file in binary mode
+    with open(pdf_file_path, "rb") as pdf_file:
+        # Read the PDF file's binary data
+        pdf_bytes = pdf_file.read()
+
+        # Create the download button
+        st.sidebar.download_button(
+            label="Download selected document",
+            data=pdf_bytes,
             file_name=document_name,
-            mime="application/pdf",
+            mime="application/octet-stream",
+            use_container_width=True,
         )
-        st.write("## Document Summary")
-        st.info(document_summary)
+    summary = summary_data.get(document_name)
+    with st.sidebar.expander("AI generated summary of the document", expanded=True):
+        if summary:
+            st.write(summary.get("summary", "Summary not available."))
+        else:
+            st.write(f"Summary of '{document_name}' not found in the file.")
 
 
 # Download or get the main themes of the selected document
