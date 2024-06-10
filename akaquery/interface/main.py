@@ -104,19 +104,41 @@ summary_data = get_json("notebook/summary.json")
 
 # Inject the CSS into the Streamlit app
 # st.markdown(sidebar_style, unsafe_allow_html=True)
+st.sidebar.header("About")
 
+st.sidebar.header("About")
 
 with st.sidebar:
-    st.header("**LLM Model**")
-    st.write(
-        f"The *{model_name}*-powered RAG process searches for and retrieves information on actuarial documents. Harness its power but **with accountability and responsibility**."
+    st.markdown(
+        "Welcome to **AKAQUERY**, an AI-powered tool designed to help teams and to make life easier regarding legislation consultation."
     )
-    st.write(
-        "**AI's responses should not be relied upon as accurate or error-free.** The quality of the retrieved contexts and responses may depend on LLM algorithms, RAG parameters, and how questions are asked."
+    st.markdown(
+        "Actuaries are strongly advised to **evaluate for accuracy** when using AI. Download the documents to read and review the source. Read the retrieved contexts to compare to AI's responses."
     )
-    st.write(
-        "Actuaries are strongly advised to **evaluate for accuracy** when using AI. Download the documents to read and review the source. Read the retrieved contexts to compare to chat's response."
-    )
+    st.markdown("Created by [Emilio Aguiar](https://www.linkedin.com/in/matthewrwadams/).")
+
+    # Add "Star on GitHub" link to the sidebar
+    badge_html = """
+    <a href="https://emilio1030.github.io/ParticleGround-Portfolio/">
+    <img alt="Static Badge" src="https://img.shields.io/badge/Portfolio-Python-brightgreen?logo=python">
+    </a>
+    """
+    st.markdown(badge_html, unsafe_allow_html=True)
+
+    st.markdown("""---""")
+
+# with st.sidebar:
+
+#     st.header("**LLM Model**")
+#     st.write(
+#         f"The *{model_name}*-powered RAG process searches for and retrieves information on actuarial documents. Harness its power but **with accountability and responsibility**."
+#     )
+#     st.write(
+#         "**AI's responses should not be relied upon as accurate or error-free.** The quality of the retrieved contexts and responses may depend on LLM algorithms, RAG parameters, and how questions are asked."
+#     )
+#     st.write(
+#         "Actuaries are strongly advised to **evaluate for accuracy** when using AI. Download the documents to read and review the source. Read the retrieved contexts to compare to chat's response."
+#     )
 
     collection_name = st.selectbox(
         "Select your document collection",
