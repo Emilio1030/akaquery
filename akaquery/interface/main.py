@@ -113,9 +113,7 @@ with st.sidebar:
     st.markdown(
         "**AKAQUERY** enables users to review summaries or download full documents. Ensure consistency by comparing the retrieved context with AI responses."
     )
-    st.markdown(
-        "Compare the retrieved contexts with AI responses for consistency."
-    )
+
     st.markdown("Created by [Emilio Aguiar](https://www.linkedin.com/in/matthewrwadams/).")
 
     # Add "Star on GitHub" link to the sidebar
