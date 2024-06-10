@@ -33,10 +33,10 @@ from htbuilder import HtmlElement, div, ul, li, br, hr, a, p, img, styles, class
 
 
 # Start Streamlit session
-st.set_page_config(page_title="Actuarial Doc Q&A Model", page_icon="📖")
+st.set_page_config(page_title="AKAQUERY", page_icon="icon/speech-bubble.png")
 
 st.header(
-    "Actuarial Documents Q&A (RAG)"
+    "AKAQUERY Q&A (RAG)"
 )
 st.write(
     "Please see the sidebar to select a collection of documents."
@@ -114,7 +114,7 @@ with st.sidebar:
         "**AKAQUERY** enables users to review summaries or download full documents. Ensure consistency by comparing the retrieved context with AI responses."
     )
 
-    st.markdown("Created by [Emilio Aguiar](https://www.linkedin.com/in/matthewrwadams/).")
+    st.markdown("Created by [Emilio Aguiar](https://www.linkedin.com/in/emilioaguiar/).")
 
     # Add "Star on GitHub" link to the sidebar
     badge_html = """
