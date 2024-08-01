@@ -33,7 +33,7 @@ from htbuilder import HtmlElement, div, ul, li, br, hr, a, p, img, styles, class
 
 
 # Start Streamlit session
-st.set_page_config(page_title="AKAQUERY", page_icon="icon/speech-bubble.png")
+st.set_page_config(page_title="AKAQUERY", page_icon="icon/box.png")
 
 st.header(
     "AKAQUERY Q&A (RAG)"
@@ -113,6 +113,10 @@ with st.sidebar:
     st.markdown(
         "**AKAQUERY** enables users to review summaries or download full documents. Ensure consistency by comparing the retrieved context with AI responses."
     )
+
+    st.write(
+        "Check out the [AKABRIEF](https://akabrief.streamlit.app/) app to effortlessly summarize documents and find answers to document-related questions."
+        )
 
     st.markdown("Created by [Emilio Aguiar](https://www.linkedin.com/in/emilioaguiar/).")
 
