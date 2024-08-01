@@ -341,7 +341,7 @@ avatars = {"human": "user" , "ai": "assistant"}
 
 # Initialize the chat history
 if len(msgs.messages) == 0:
-    msgs.add_ai_message("Welcome to life actuarial document Q&A assistant!")
+    msgs.add_ai_message("AKAQUERY")
 
 for msg in msgs.messages:
     if msg.content.startswith("Query:"):
